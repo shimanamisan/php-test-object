@@ -1,0 +1,24 @@
+{
+    "name": "hn_pgtech/sample_php_project",
+    "description": "PHPの機能を検証する",
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.17",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/extension-installer": "^1.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "BaseClass\\": "ObjectSample/BaseClass/",
+            "ExtendTrait\\": "ObjectSample/ExtendTrait/",
+            "SampleStatic\\": "ObjectSample/SampleStatic/",
+            "SampleConst\\": "ObjectSample/SampleConst/",
+            "SampleAbstract\\": "ObjectSample/SampleAbstract/",
+            "SampleInterface\\": "ObjectSample/SampleInterface/"
+        }
+    }
+}

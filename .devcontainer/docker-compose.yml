@@ -1,0 +1,117 @@
+version: "3.9"
+
+volumes:
+  db-mysql-store-test-object:
+    name: db-store-mysql-test-object
+  db-postgres-store-test-object:
+    name: db-store-postgres-test-object
+  db-sqlserver-store-test-object:
+    name: db-store-sqlserver-test-object
+
+services:
+  nginx-proxy-test-object:
+    container_name: nginx-proxy-php-test-object
+    image: nginx-proxy-php-test-object:1.0
+    build:
+      context: ./proxy
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  web-test-object:
+    container_name: web-devcontainer-php-test-object
+    image: web-php-test-object:1.0
+    build:
+      context: ./web
+      dockerfile: ./Dockerfile
+    env_file: .env
+    volumes:
+      - ./web/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./web/php/php.ini:/usr/local/etc/php/php.ini
+      # トップディレクトリと同期
+      - ../:/workspace:cached
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+
+  db-mysql-test-object:
+    container_name: db-devcontainer-mysql-test-object
+    image: mysql-php-test-object:1.0
+    build:
+      context: ./mysql
+      dockerfile: ./Dockerfile
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - db-mysql-store-test-object:/var/lib/mysql
+    environment:
+      TZ: ${TIME_ZONE}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+  phpmyadmin-test-object:
+    container_name: phpmyadmin-devcontainer-php-test-object
+    image: phpmyadmin-php-test-object:1.0
+    build:
+      context: ./phpmyadmin
+      dockerfile: ./Dockerfile
+    env_file: .env
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: ${PMA_ARBITRARY}
+      PMA_HOSTS: ${PMA_HOSTS}
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+      VIRTUAL_HOST: ${VIRTUAL_HOST_PHPMYADMIN}
+    depends_on:
+      - db-mysql-test-object
+
+  db-postgres-test-object:
+    container_name: db-devcontainer-postgres-test-object
+    image: postgres-php-test-object:1.0
+    build:
+      context: ./postgreSQL
+      dockerfile: ./Dockerfile
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - db-postgres-store-test-object:/var/lib/postgresql/data
+      - ./postgreSQL/postgresql.conf:/etc/postgresql/postgresql.conf
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  db-sqlserver-test-object:
+    container_name: db-devcontainer-sqlserver-test-object
+    image: sqlserver-php-test-object:1.0
+    build:
+      context: ./sqlserver
+      dockerfile: ./Dockerfile
+    env_file: .env
+    ports:
+      - 1433:1433
+    volumes:
+      - db-sqlserver-store-test-object:/var/opt/mssql
+    environment:
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: ${MSSQL_PID}
+      MSSQL_LCID: ${MSSQL_LCID}
+      MSSQL_COLLATION: ${MSSQL_COLLATION}
+
+  mailhog-test-object:
+    container_name: mailhog-devcontainer-php-test-object
+    image: mailhog-php-test-object:1.0
+    build:
+      context: ./mail
+      dockerfile: ./Dockerfile
+    ports:
+      - 8025:8025

@@ -1,0 +1,74 @@
+{
+    // INFO: https://bufferings.hatenablog.com/entry/2020/06/11/233201
+    // INFO: https://techblog.roxx.co.jp/entry/2021/04/19/132838
+    "name": "php-test-object",
+    "dockerComposeFile": "docker-compose.yml",
+    // docker-compose.ymlファイル内のどのサービスがDev Containerであるかを示す
+    "service": "web-test-object",
+    // ワークスペースを指定
+    "workspaceFolder": "/workspace",
+    // コンテナ内のポートのリストをローカルで利用できるようにするには、「forwardPorts」を使用します。
+    // xdebug.iniに書いたport番号と同じにする
+    "forwardPorts": [
+        9003
+    ],
+    "remoteUser": "user01",
+    // devcontainerで開いた時のvscode側の設定カスタマイズ
+    "customizations": {
+        // VS Code固有のプロパティを設定します
+        "vscode": {
+            // 拡張機能などの設定
+            "settings": {
+                /*****************************
+                * VS Codeの基本設定
+                ******************************/
+                // エディターのインデントのサイズを指定（デフォルトは4）
+                "editor.tabSize": 4,
+                /*****************************
+                * php-cs-fixer関連の設定
+                ******************************/
+                // 保存時に整形を実行する
+                "php-cs-fixer.onsave": true,
+                // HTMLファイルが含まれる場合も整形する
+                "php-cs-fixer.formatHtml": true,
+                // composerでphp-cs-fixerをインストールしておく
+                "php-cs-fixer.executablePath": "/workspace/public/vendor/bin/php-cs-fixer",
+                "php-cs-fixer.rules": "@PSR12",
+                "php-cs-fixer.config": ".php-cs-fixer.php;.php-cs-fixer.dist.php;.php_cs;.php_cs.dist",
+                "[php]": {
+                    // PHPで使用するデフォルトのフォーマッターをインストールした拡張機能に指定する
+                    "editor.defaultFormatter": "junstyle.php-cs-fixer"
+                },
+                /*****************************
+                * phpstan関連の設定
+                ******************************/
+                // phpstanがインストールされているディレクトリを指定
+                "phpstan.binPath": "/workspace/public",
+                // phpstan.neonが格納されているディレクトリを指定
+                "phpstan.configFile": "/workspace/public",
+                /*****************************
+                * PHP拡張機能共通の設定
+                ******************************/
+                // phpのバイナリファイルを指定
+                "php.validate.executablePath": "/usr/local/bin/php"
+            },
+            // コンテナ内にインストールする拡張機能を指定する
+            "extensions": [
+                // PHP Debug
+                "xdebug.php-debug",
+                // PHP Namespace Resolver
+                "MehediDracula.php-namespace-resolver",
+                // PHP DocBlocker
+                "neilbrayfield.php-docblocker",
+                // phpstan
+                "SanderRonde.phpstan-vscode",
+                // PHP Intelephense
+                "bmewburn.vscode-intelephense-client",
+                // indent-rainbow
+                "oderwat.indent-rainbow",
+                // php cs fixer
+                "junstyle.php-cs-fixer"
+            ]
+        }
+    }
+}
