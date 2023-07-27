@@ -83,8 +83,9 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - db-postgres-store-test-object:/var/lib/postgresql/data
+      - ./postgreSQL/init:/docker-entrypoint-initdb.d
       - ./postgreSQL/postgresql.conf:/etc/postgresql/postgresql.conf
+      - db-postgres-store-test-object:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
