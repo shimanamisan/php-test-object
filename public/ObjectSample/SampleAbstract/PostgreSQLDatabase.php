@@ -18,7 +18,7 @@ class PostgreSQLDatabase extends AbstractDatabase
     *
     * @var string
     */
-    public const DSN = "pgsql:host=db-devcontainer-postgres;dbname=postgres_db";
+    public const DSN = "pgsql:host=db-devcontainer-postgres-test-object;dbname=postgres_db";
 
     /**
     * PostgreSQLのユーザ名。

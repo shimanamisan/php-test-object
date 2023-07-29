@@ -18,7 +18,7 @@ class MySQLDatabase extends AbstractDatabase
     *
     * @var string
     */
-    public const DSN = "mysql:host=db-devcontainer-mysql;dbname=mysql_db";
+    public const DSN = "mysql:host=db-devcontainer-mysql-test-object;dbname=mysql_db";
 
     /**
     * MySQLのユーザ名。

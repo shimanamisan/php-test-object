@@ -18,7 +18,7 @@ class SQLServer extends AbstractDatabase
     * TrustServerCertificate=true; => PDOの接続文字列でSSLの検証を無効にする
     * @var string
     */
-    public const DSN = "sqlsrv:server=db-devcontainer-sqlserver;database=master;TrustServerCertificate=true;";
+    public const DSN = "sqlsrv:server=db-devcontainer-sqlserver-test-object;database=master;TrustServerCertificate=true;";
 
     /**
     * SQL Serverのユーザ名。
